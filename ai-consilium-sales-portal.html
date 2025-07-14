@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Консилиум - Система автоматизации маркетинга для медклиник</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #48bb78;
+            --danger-color: #f56565;
+            --dark-color: #2d3748;
+            --light-color: #f7fafc;
+            --text-color: #4a5568;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #ffffff;
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+        
+        /* Sections */
+        .section {
+            display: none;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-color);
+        }
+        
+        /* Presentation Slides */
+        .presentation-container {
+            background: var(--light-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .slide {
+            display: none;
+            min-height: 500px;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        .slide h2 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .slide h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+        }
+        
+        .slide-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        
+        .slide-counter {
+            color: var(--text-color);
+        }
+        
+        .slide-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        /* Price Cards */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .price-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .price-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .price-card.recommended {
+            border: 3px solid var(--primary-color);
+            transform: scale(1.05);
+        }
+        
+        .price-card.recommended::before {
+            content: 'РЕКОМЕНДУЕМ';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+        
+        .package-name {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .package-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+        
+        .price-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .price-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .check {
+            color: var(--success-color);
+        }
+        
+        /* Calculator */
+        .calculator-section {
+            background: var(--light-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 2rem 0;
+        }
+        
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper input,
+        .input-wrapper select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .input-wrapper input:focus,
+        .input-wrapper select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .input-suffix {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+        }
+        
+        .result-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .result-label {
+            font-size: 0.875rem;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+        
+        .result-change {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .positive {
+            color: var(--success-color);
+        }
+        
+        .negative {
+            color: var(--danger-color);
+        }
+        
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin: 2rem 0;
+        }
+        
+        .comparison-table th {
+            background: var(--light-color);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .price-card.recommended {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">AI-КОНСИЛИУМ</div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a class="nav-link active" onclick="showSection('home')">Главная</a></li>
+                <li><a class="nav-link" onclick="showSection('presentation')">Презентация</a></li>
+                <li><a class="nav-link" onclick="showSection('pricing')">Цены</a></li>
+                <li><a class="nav-link" onclick="showSection('calculator')">Калькулятор ROI</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <h1>AI-Консилиум</h1>
+            <p>Превращаем одного вашего ассистента в команду международных экспертов<br>по привлечению пациентов</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="showSection('presentation')">Смотреть презентацию</button>
+                <button class="btn btn-secondary" onclick="showSection('calculator')">Рассчитать ROI</button>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">300%</div>
+                    <div class="stat-label">Средний ROI за 3 месяца</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Видео в месяц</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3x</div>
+                    <div class="stat-label">Снижение стоимости лида</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Дней до запуска</div>
+                </div>
+            </div>
+            
+            <h2 style="text-align: center; margin: 3rem 0; font-size: 2rem;">Как это работает?</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎬</div>
+                    <h3 style="margin-bottom: 1rem;">1. Создаем AI-аватар</h3>
+                    <p>30 минут записи = безлимит контента на год</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
+                    <h3 style="margin-bottom: 1rem;">2. Генерируем контент</h3>
+                    <p>100+ видео автоматически каждый месяц</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
+                    <h3 style="margin-bottom: 1rem;">3. Публикуем везде</h3>
+                    <p>Instagram, TikTok, YouTube — одновременно</p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">💰</div>
+                    <h3 style="margin-bottom: 1rem;">4. Получаете результат</h3>
+                    <p>Поток пациентов растет в 3-5 раз</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Presentation Section -->
+    <section id="presentation" class="section">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 2rem;">Презентация для медицинских клиник</h1>
+            
+            <div class="presentation-container">
+                <!-- Slide 1 -->
+                <div class="slide active">
+                    <h2>Знакомая ситуация?</h2>
+                    <div style="max-width: 800px; margin: 0 auto;">
+                        <div class="result-card" style="margin: 1rem 0;">
+                            <p style="font-size: 1.25rem; color: var(--danger-color);">❌ Стоимость привлечения пациента: 100-150к ₽</p>
+                        </div>
+                        <div class="result-card" style="margin: 1rem 0;">
+                            <p style="font-size: 1.25rem; color: var(--danger-color);">❌ SMM-команда обходится в 200-300к ₽/мес</p>
+                        </div>
+                        <div class="result-card" style="margin: 1rem 0;">
+                            <p style="font-size: 1.25rem; color: var(--danger-color);">❌ Публикуете всего 10-15 постов в месяц</p>
+                        </div>
+                        <div class="result-card" style="margin: 1rem 0;">
+                            <p style="font-size: 1.25rem; color: var(--danger-color);">❌ Конкуренты активнее в 10 раз</p>
+                        </div>
+                        <div class="result-card" style="margin: 1rem 0;">
+                            <p style="font-size: 1.25rem; color: var(--danger-color);">❌ 40% пациентов уезжают в Турцию</p>
+                        </div>
+                    </div>
+                    <p style="text-align: center; font-size: 1.5rem; margin-top: 2rem; color: var(--primary-color); font-weight: 600;">
+                        87% клиник теряют пациентов из-за слабого digital-присутствия
+                    </p>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <h2>Ваше решение: AI-Консилиум</h2>
+                    <h3 style="text-align: center;">Не заменяем людей — создаем суперкоманду</h3>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Было</th>
+                            <th>Стало с AI-Консилиум</th>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--danger-color);">1 SMM-менеджер за 250к/мес</td>
+                            <td style="color: var(--success-color);">1 ассистент + AI-команда</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--danger-color);">10-15 постов в месяц</td>
+                            <td style="color: var(--success-color);">100+ премиум-видео</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--danger-color);">Расходы 300к ₽/мес</td>
+                            <td style="color: var(--success-color);">Экономия 2.4 млн ₽/год</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--danger-color);">CPL 100-150к ₽</td>
+                            <td style="color: var(--success-color);">CPL 25-35к ₽</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <h2>Результаты наших клиентов</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 style="color: var(--primary-color);">Клиника "МедЭстет"</h3>
+                            <div class="stat-number">+347%</div>
+                            <div class="stat-label">рост пациентов за 2 месяца</div>
+                            <p style="margin-top: 1rem;">CPL: 140к → 28к ₽</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 style="color: var(--primary-color);">Dr. Beauty Clinic</h3>
+                            <div class="stat-number">23</div>
+                            <div class="stat-label">пациента вернули из Турции</div>
+                            <p style="margin-top: 1rem;">За первый месяц работы</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 style="color: var(--primary-color);">Центр "Эстетика"</h3>
+                            <div class="stat-number">520%</div>
+                            <div class="stat-label">ROI за 3 месяца</div>
+                            <p style="margin-top: 1rem;">Окупаемость: 18 дней</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="slide">
+                    <h2>Быстрый старт за 7 дней</h2>
+                    <div style="max-width: 800px; margin: 0 auto;">
+                        <table class="comparison-table">
+                            <tr>
+                                <th style="width: 30%;">День</th>
+                                <th>Что происходит</th>
+                            </tr>
+                            <tr>
+                                <td><strong>День 1</strong></td>
+                                <td>Подписание договора, заполнение брифа о клинике</td>
+                            </tr>
+                            <tr>
+                                <td><strong>День 2-3</strong></td>
+                                <td>Запись AI-аватара вашего ведущего врача (30 минут)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>День 4-5</strong></td>
+                                <td>Создание и согласование первых 30 видео</td>
+                            </tr>
+                            <tr>
+                                <td><strong>День 6</strong></td>
+                                <td>Настройка автопубликации во всех соцсетях</td>
+                            </tr>
+                            <tr>
+                                <td><strong>День 7</strong></td>
+                                <td>🚀 Запуск! Первые публикации в ваших аккаунтах</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Slide Navigation -->
+                <div class="slide-nav">
+                    <span class="slide-counter">
+                        <span id="currentSlide">1</span> из <span id="totalSlides">4</span>
+                    </span>
+                    <div class="slide-buttons">
+                        <button class="btn btn-secondary" onclick="previousSlide()">← Назад</button>
+                        <button class="btn btn-primary" onclick="nextSlide()">Далее →</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn btn-primary" style="font-size: 1.25rem; padding: 1rem 3rem;" onclick="showSection('calculator')">
+                    Рассчитать ROI для вашей клиники →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 1rem;">Выберите подходящий пакет</h1>
+            <p style="text-align: center; color: var(--text-color); margin-bottom: 3rem;">
+                Все пакеты включают полное сопровождение и гарантию результата
+            </p>
+            
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🥉</div>
+                    <h3 class="package-name">START</h3>
+                    <p style="color: var(--text-color); margin-bottom: 1rem;">Идеально для тестирования</p>
+                    <div class="package-price">150,000 ₽</div>
+                    <p style="color: var(--text-color); margin-bottom: 2rem;">в месяц</p>
+                    <ul class="price-features">
+                        <li><span class="check">✓</span> 50+ видео ежемесячно</li>
+                        <li><span class="check">✓</span> 2 социальные сети</li>
+                        <li><span class="check">✓</span> Базовые шаблоны контента</li>
+                        <li><span class="check">✓</span> Email-поддержка</li>
+                        <li><span class="check">✓</span> Квартальная аналитика</li>
+                        <li><span class="check">✓</span> 1 AI-аватар</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Выбрать START</button>
+                </div>
+                
+                <div class="price-card recommended">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🥈</div>
+                    <h3 class="package-name">OPTIMAL</h3>
+                    <p style="color: var(--text-color); margin-bottom: 1rem;">Оптимальное решение</p>
+                    <div class="package-price">250,000 ₽</div>
+                    <p style="color: var(--text-color); margin-bottom: 2rem;">в месяц</p>
+                    <ul class="price-features">
+                        <li><span class="check">✓</span> 100+ видео ежемесячно</li>
+                        <li><span class="check">✓</span> 5 социальных сетей</li>
+                        <li><span class="check">✓</span> Персональный AI-аватар врача</li>
+                        <li><span class="check">✓</span> Индивидуальный контент-план</li>
+                        <li><span class="check">✓</span> Персональный менеджер</li>
+                        <li><span class="check">✓</span> Ежемесячная аналитика</li>
+                        <li><span class="check">✓</span> A/B тестирование</li>
+                        <li><span class="check">✓</span> Приоритетная поддержка</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Выбрать OPTIMAL</button>
+                </div>
+                
+                <div class="price-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🥇</div>
+                    <h3 class="package-name">PREMIUM</h3>
+                    <p style="color: var(--text-color); margin-bottom: 1rem;">Максимум возможностей</p>
+                    <div class="package-price">450,000 ₽</div>
+                    <p style="color: var(--text-color); margin-bottom: 2rem;">в месяц</p>
+                    <ul class="price-features">
+                        <li><span class="check">✓</span> 150+ видео ежемесячно</li>
+                        <li><span class="check">✓</span> Все доступные платформы</li>
+                        <li><span class="check">✓</span> 3 AI-аватара разных врачей</li>
+                        <li><span class="check">✓</span> Анализ конкурентов</li>
+                        <li><span class="check">✓</span> Новые ниши пациентов</li>
+                        <li><span class="check">✓</span> Еженедельные отчеты C-level</li>
+                        <li><span class="check">✓</span> Гарантия ROI 300%</li>
+                        <li><span class="check">✓</span> VIP-поддержка 24/7</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Выбрать PREMIUM</button>
+                </div>
+            </div>
+            
+            <!-- Special Offer -->
+            <div style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; padding: 3rem; border-radius: 16px; margin: 3rem 0; text-align: center;">
+                <h2 style="margin-bottom: 1rem;">🎁 Специальное предложение для новых клиентов</h2>
+                <p style="font-size: 1.25rem; margin-bottom: 2rem;">Запустите пилотный проект на особых условиях:</p>
+                <div class="stats-grid" style="max-width: 800px; margin: 0 auto;">
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; font-weight: 800;">0 ₽</div>
+                        <div>первые 2 недели</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; font-weight: 800;">-50%</div>
+                        <div>на первый месяц</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 12px;">
+                        <div style="font-size: 2rem; font-weight: 800;">100%</div>
+                        <div>гарантия результата</div>
+                    </div>
+                </div>
+                <p style="margin-top: 2rem; opacity: 0.9;">* Предложение действительно при подписании договора до конца месяца</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section id="calculator" class="section">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 1rem;">Калькулятор ROI для вашей клиники</h1>
+            <p style="text-align: center; color: var(--text-color); margin-bottom: 3rem;">
+                Введите данные вашей клиники и получите персональный расчет окупаемости
+            </p>
+            
+            <div class="calculator-section">
+                <div class="calc-grid">
+                    <div>
+                        <h3 style="margin-bottom: 2rem;">Ваши текущие показатели</h3>
+                        
+                        <div class="input-group">
+                            <label>Количество операций/процедур в месяц</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="operations" value="20" min="1" max="500">
+                                <span class="input-suffix">шт</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Средний чек операции/процедуры</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="avgCheck" value="500000" min="10000" max="5000000" step="10000">
+                                <span class="input-suffix">₽</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Текущая стоимость привлечения пациента (CPL)</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="currentCPL" value="120000" min="10000" max="500000" step="5000">
+                                <span class="input-suffix">₽</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Текущие расходы на маркетинг в месяц</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="marketingBudget" value="400000" min="50000" max="5000000" step="10000">
+                                <span class="input-suffix">₽</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Выберите пакет AI-Консилиум</label>
+                            <select id="package">
+                                <option value="150000">START (150,000 ₽/мес)</option>
+                                <option value="250000" selected>OPTIMAL (250,000 ₽/мес)</option>
+                                <option value="450000">PREMIUM (450,000 ₽/мес)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 style="margin-bottom: 2rem;">Прогноз результатов</h3>
+                        
+                        <div class="result-card">
+                            <div class="result-label">Новая стоимость привлечения пациента</div>
+                            <div class="result-value" id="newCPL">25,000 ₽</div>
+                            <div class="result-change positive" id="cplReduction">📉 Снижение на 79%</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-label">Прогноз пациентов в месяц</div>
+                            <div class="result-value" id="newPatients">96</div>
+                            <div class="result-change positive" id="patientsIncrease">📈 Рост на 380%</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-label">Дополнительная выручка в год</div>
+                            <div class="result-value" id="additionalRevenue">38,400,000 ₽</div>
+                            <div class="result-change positive" id="revenueIncrease">💰 +3.2 млн ₽/мес</div>
+                        </div>
+                        
+                        <div class="result-card" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">
+                            <div class="result-label" style="color: white;">Возврат инвестиций (ROI)</div>
+                            <div class="result-value" id="roi" style="color: white;">1280%</div>
+                            <div class="result-change" id="paybackPeriod" style="color: white;">🚀 Окупаемость: 18 дней</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 3rem;">
+                    <button class="btn btn-primary" style="font-size: 1.25rem; padding: 1rem 3rem;" onclick="scheduleDemo()">
+                        Получить персональную презентацию →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h2 style="margin-bottom: 1rem;">AI-Консилиум</h2>
+            <p style="margin-bottom: 2rem;">Ваш партнер в цифровой трансформации медицины</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📞</span>
+                    <span>+7 (999) 123-45-67</span>
+                </div>
+                <div class="contact-item">
+                    <span>📧</span>
+                    <span>info@ai-consilium.ru</span>
+                </div>
+                <div class="contact-item">
+                    <span>🌐</span>
+                    <span>ai-consilium.ru</span>
+                </div>
+            </div>
+            <p style="margin-top: 2rem; opacity: 0.7;">© 2024 AI-Консилиум. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Set active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('onclick').includes(sectionId)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Close mobile menu
+            document.getElementById('navLinks').classList.remove('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+        
+        // Presentation slides
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.presentation-container .slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+        
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            document.getElementById('currentSlide').textContent = index + 1;
+        }
+        
+        function nextSlide() {
+            currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+            showSlide(currentSlideIndex);
+        }
+        
+        function previousSlide() {
+            currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
+            showSlide(currentSlideIndex);
+        }
+        
+        // Keyboard navigation for slides
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('presentation').classList.contains('active')) {
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === 'ArrowLeft') previousSlide();
+            }
+        });
+        
+        // ROI Calculator
+        const inputs = ['operations', 'avgCheck', 'currentCPL', 'marketingBudget', 'package'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateROI);
+        });
+        
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ru-RU').format(num);
+        }
+        
+        function formatCurrency(num) {
+            return formatNumber(num) + ' ₽';
+        }
+        
+        function calculateROI() {
+            // Get input values
+            const operations = parseInt(document.getElementById('operations').value) || 20;
+            const avgCheck = parseInt(document.getElementById('avgCheck').value) || 500000;
+            const currentCPL = parseInt(document.getElementById('currentCPL').value) || 120000;
+            const marketingBudget = parseInt(document.getElementById('marketingBudget').value) || 400000;
+            const packagePrice = parseInt(document.getElementById('package').value) || 250000;
+            
+            // Calculations
+            const newCPL = 25000; // Average CPL after implementation
+            const cplReduction = Math.round(((currentCPL - newCPL) / currentCPL) * 100);
+            
+            // How many patients we can attract with the same budget
+            const currentPatients = Math.floor(marketingBudget / currentCPL);
+            const potentialPatients = Math.floor(packagePrice / newCPL);
+            const totalNewPatients = operations + potentialPatients;
+            const patientsIncrease = Math.round(((totalNewPatients - operations) / operations) * 100);
+            
+            // Additional revenue
+            const additionalPatients = totalNewPatients - operations;
+            const additionalRevenueYear = additionalPatients * avgCheck * 12;
+            const additionalRevenueMonth = additionalPatients * avgCheck;
+            
+            // ROI
+            const yearCost = packagePrice * 12;
+            const roi = Math.round((additionalRevenueYear / yearCost) * 100);
+            const paybackDays = Math.round(packagePrice / (additionalRevenueMonth / 30));
+            
+            // Update UI
+            document.getElementById('newCPL').textContent = formatCurrency(newCPL);
+            document.getElementById('cplReduction').textContent = `📉 Снижение на ${cplReduction}%`;
+            document.getElementById('newPatients').textContent = totalNewPatients;
+            document.getElementById('patientsIncrease').textContent = `📈 Рост на ${patientsIncrease}%`;
+            document.getElementById('additionalRevenue').textContent = formatCurrency(additionalRevenueYear);
+            document.getElementById('revenueIncrease').textContent = `💰 +${formatNumber(Math.round(additionalRevenueMonth / 1000000 * 10) / 10)} млн ₽/мес`;
+            document.getElementById('roi').textContent = `${roi}%`;
+            document.getElementById('paybackPeriod').textContent = `🚀 Окупаемость: ${paybackDays} дней`;
+        }
+        
+        // Initialize calculator
+        calculateROI();
+        
+        // Demo scheduling
+        function scheduleDemo() {
+            alert('Спасибо за интерес! Мы свяжемся с вами в течение 24 часов для назначения персональной презентации.');
+            // In real implementation, this would send data to server
+        }
+    </script>
+</body>
+</html>
